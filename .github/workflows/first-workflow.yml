@@ -1,6 +1,9 @@
 name: Workflow 1
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+  issues:
+    types: [ opened ]
 
 jobs:
   job1:
