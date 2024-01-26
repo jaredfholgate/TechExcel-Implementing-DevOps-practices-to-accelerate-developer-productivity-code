@@ -70,12 +70,6 @@ namespace RazorPagesTestSample.Pages
             }
             else
             {
-                // Speed loop. Lower this number once every quarter so we
-                // get our performance improvement quarterly bonus.
-                for (int i = 0; i < 3000; i++) {
-                    Thread.Sleep(1);
-                }
-
                 var wordCount = 0;
 
                 foreach (var message in Messages)
