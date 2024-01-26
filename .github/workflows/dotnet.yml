@@ -11,6 +11,7 @@ env:
   registryName: dgazahrqmqjrkmpnpreg.azurecr.io
   prefix: dgazahrqmqjrk
   repositoryName: techboost/dotnetcoreapp
+  appServiceDomain: azurewebsites.net
   dockerFolderPath: ./Application/src/RazorPagesTestSample
   tag: ${{github.run_number}}
 
@@ -29,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./Application/src/RazorPagesTestSample"
+        working-directory: ${{ env.dockerFolderPath }}
     
     steps:
     - uses: actions/checkout@v3
@@ -77,7 +78,7 @@ jobs:
     needs: dockerBuildPush
     environment:
       name: dev
-      url: https://${{ env.prefix }}-dev.azurewebsites.net/
+      url: https://${{ env.prefix }}-dev.${{ env.appServiceDomain }}/
     
     steps:
       - name: 'Login via Azure CLI'
@@ -90,7 +91,7 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: '${{ env.prefix }}-dev'
-          images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
+          images: ${{ env.registryName }}/${{ env.repositoryName }}:${{ env.tag }}
 
   deploy-to-test:
   
@@ -98,7 +99,7 @@ jobs:
     needs: deploy-to-dev
     environment:
       name: test
-      url: https://${{ env.prefix }}-test.azurewebsites.net/
+      url: https://${{ env.prefix }}-test.${{ env.appServiceDomain }}/
     
     steps:
     - uses: actions/checkout@v3
@@ -113,7 +114,7 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: '${{ env.prefix }}-test'
-        images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
+        images: ${{ env.registryName }}/${{ env.repositoryName }}:${{ env.tag }}
 
   deploy-to-prod:
   
@@ -121,7 +122,7 @@ jobs:
     needs: deploy-to-test
     environment:
       name: prod
-      url: https://${{ env.prefix }}-prod.azurewebsites.net/
+      url: https://${{ env.prefix }}-prod.${{ env.appServiceDomain }}/
     
     steps:
     - uses: actions/checkout@v3
@@ -136,4 +137,4 @@ jobs:
     - uses: azure/webapps-deploy@v2
       with:
         app-name: '${{ env.prefix }}-prod'
-        images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
+        images: ${{ env.registryName }}/${{ env.repositoryName }}:${{ env.tag }}
