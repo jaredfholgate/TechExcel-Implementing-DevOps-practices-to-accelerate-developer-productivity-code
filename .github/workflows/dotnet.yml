@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "./Application/src"
+        working-directory: "./Application/src/RazorPagesTestSample"
     
     steps:
     - uses: actions/checkout@v3
