@@ -79,11 +79,13 @@ jobs:
       - name: 'Login via Azure CLI'
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: '{your_prefix}-dev'
+          app-name: '${{ env.prefix }}-dev'
           images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
 
   deploy-to-test:
@@ -100,11 +102,13 @@ jobs:
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: '{your_prefix}-test'
+        app-name: '${{ env.prefix }}-test'
         images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
 
   deploy-to-prod:
@@ -121,9 +125,11 @@ jobs:
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
     - uses: azure/webapps-deploy@v2
       with:
-        app-name: '{your_prefix}-prod'
+        app-name: '${{ env.prefix }}-prod'
         images: ${{ env.registryName }}/techboost/dotnetcoreapp:${{github.run_number}}
